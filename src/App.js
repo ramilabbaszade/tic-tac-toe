@@ -13,7 +13,7 @@ function App() {
     "",
     "",
   ]);
-  const winningMatchs = [1,2,3]
+  const winningMatchs = [0,1,2]
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [firstPlayerTicks, setFirstPlayerTicks] = useState([]);
   const [secondPlayerTicks, setSecondPlayerTicks] = useState([]);
@@ -45,8 +45,6 @@ function App() {
     if(is_same(secondPlayerTicks,winningMatchs)){
       alert("Second player WON")
     }
-    
-    
   };
   const is_same = (array1, array2) => {
     return array1.toString() === array2.toString()
@@ -54,9 +52,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Tic Tac Toe</h1>
+      <div className={`p ${currentPlayer === 1 && "p1"}`}>1</div>
+      <div className={`p ${currentPlayer === 2 && "p2"}`}>2</div>
       <div className="game_canvas">
-        {currentPlayer}
         <div className="container">
           {gameGrid.map((cell, index) => {
             return (
