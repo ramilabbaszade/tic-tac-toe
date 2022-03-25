@@ -54,3 +54,22 @@
   font-size: 2rem;
   font-weight: 700;
 }
+
+.winnerboard{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  color: white;
+  padding: 1rem;
+  background: #269F37;
+}
+
+.winnerboard button{
+  background: white;
+  padding: 1rem;
+  border-radius: .3rem;
+  border: none;
+}

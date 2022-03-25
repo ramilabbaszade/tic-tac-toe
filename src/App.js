@@ -2,71 +2,98 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [gameGrid, setGameGrid] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
-  const winningMatchs = [0,1,2]
-  const [currentPlayer, setCurrentPlayer] = useState(1);
-  const [firstPlayerTicks, setFirstPlayerTicks] = useState([]);
-  const [secondPlayerTicks, setSecondPlayerTicks] = useState([]);
+  const [cells, setCells] = useState(Array(9).fill(""));
+  const [turn, setTurn] = useState("x");
+  const [winner, setWinner] = useState();
 
-  const setGameCell = async (index) => {
-    if(gameGrid[index] === "")
-    {let inputValue = currentPlayer === 1 ? "X" : "O";
-    setGameGrid(
-      gameGrid.map((btn, i) => {
-        if (!btn && index === i) return inputValue;
-        else return btn;
-      })
-    );
-    if (currentPlayer === 1 && firstPlayerTicks.length < 3) {
-      firstPlayerTicks.push(index);
-    } else if(currentPlayer === 2 && secondPlayerTicks.length < 3) {
-      secondPlayerTicks.push(index);
-    }
+  const checkForWinner = (squares) => {
+    let combos = {
+      across: [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+      ],
+      down: [
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+      ],
+      diagnol: [
+        [0, 4, 8],
+        [2, 4, 6],
+      ],
+    };
 
-    setFirstPlayerTicks(firstPlayerTicks);
-    setSecondPlayerTicks(secondPlayerTicks);
-    setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
-
-    console.warn("firstPlayerTicks",firstPlayerTicks.toString());
-    console.warn("secondPlayerTicks",secondPlayerTicks.toString());}
-    if(is_same(firstPlayerTicks,winningMatchs)){
-      alert("First player WON")
-    }
-    if(is_same(secondPlayerTicks,winningMatchs)){
-      alert("Second player WON")
+    for (let combo in combos) {
+      combos[combo].forEach((pattern) => {
+        if (
+          squares[pattern[0]] === "" ||
+          squares[pattern[1]] === "" ||
+          squares[pattern[2]] === ""
+        ) {
+        } else if (
+          squares[pattern[0]] === squares[pattern[1]] &&
+          squares[pattern[1]] === squares[pattern[2]]
+        ) {
+          setWinner(squares[pattern[0]]);
+        }
+      });
     }
   };
-  const is_same = (array1, array2) => {
-    return array1.toString() === array2.toString()
+
+  const handleClick = (num) => {
+    if (!winner) {
+      if (cells[num] !== "") {
+        alert("already clicked");
+        return;
+      }
+
+      let squares = [...cells];
+
+      if (turn === "x") {
+        squares[num] = "x";
+        setTurn("o");
+      } else {
+        squares[num] = "o";
+        setTurn("x");
+      }
+
+      checkForWinner(squares);
+      setCells(squares);
+    }
+  };
+
+  const onRestart = () => {
+    setWinner(null);
+    setCells(Array(9).fill(""));
+    setTurn("x")
   };
 
   return (
     <div className="App">
-      <div className={`p ${currentPlayer === 1 && "p1"}`}>1</div>
-      <div className={`p ${currentPlayer === 2 && "p2"}`}>2</div>
+      <div className={`p ${turn === "x" && "p1"}`}>X</div>
+      <div className={`p ${turn === "o" && "p2"}`}>O</div>
       <div className="game_canvas">
         <div className="container">
-          {gameGrid.map((cell, index) => {
+          {cells.map((cell, index) => {
             return (
               <div
                 key={index}
                 className="cell"
-                onClick={() => setGameCell(index)}
+                onClick={() => handleClick(index)}
               >
                 <span>{cell}</span>
               </div>
             );
           })}
+        </div>
+        <div>
+          {winner && (
+            <div className="winnerboard">
+              <p><b>{winner}</b> is winner!</p>
+              <button onClick={() => onRestart()}>Play Again</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
