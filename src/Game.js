@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "./App.css";
+import "./Game.css";
 
-function App() {
+function Game() {
   const [cells, setCells] = useState(Array(9).fill(""));
   const [turn, setTurn] = useState("x");
   const [winner, setWinner] = useState();
@@ -70,7 +70,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="Game">
       <div className={`p ${turn === "x" && "p1"}`}>X</div>
       <div className={`p ${turn === "o" && "p2"}`}>O</div>
       <div className="game_canvas">
@@ -100,4 +100,4 @@ function App() {
   );
 }
 
-export default App;
+export default Game;
